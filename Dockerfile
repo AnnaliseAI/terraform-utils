@@ -28,6 +28,20 @@ RUN terraform init
 
 FROM ubuntu:bionic
 
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update
+RUN apt-get install \
+  ca-certificates \
+  jq \
+  python3 \
+  python3-pip \
+  python3-setuptools \
+  python3-wheel \
+  --no-install-recommends -y
+
+RUN pip3 install awscli -q
+
 RUN mkdir -p /root/.terraform.d/plugins
 COPY --from=0 /usr/local/bin/terraform /usr/local/bin/
 COPY --from=0 .terraform/plugins/ /root/.terraform.d/plugins/
